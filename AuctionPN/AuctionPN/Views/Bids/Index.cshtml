@@ -1,0 +1,113 @@
+﻿@model IEnumerable<AuctionPN.Models.Bid>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    var listBid = ViewBag.ListBid as List<Bid>;
+}
+
+<h1>Quản lí đơn đấu giá</h1>
+<table class="table">
+    <tr>
+        <td><a asp-controller="Bids" asp-action="Index">Tất cả</a></td>
+        <td>
+            <form asp-controller="Bids" asp-action="ByDay">
+                <label for="datePicker">Chọn ngày:</label>
+                <input type="date" name="day" required>
+                <button type="submit">Xem</button>
+            </form>
+            
+        </td>
+        <td>
+            <form asp-controller="Bids" asp-action="ByMonth">
+                <select name="month">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                </select>
+                <button type="submit">Xem</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<table id="dataTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BidDataTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BidPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bidder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in listBid) {
+        <tr>
+            <td>
+                @item.BidDataTime
+            </td>
+            <td>
+                @item.BidPrice
+            </td>
+            <td>
+                @item.Bidder.Name
+            </td>
+            <td>
+                @item.Item.ItemName
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.BidId">Delete</a>
+            </td>
+        </tr>
+}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button onclick="Export()">Export</button></td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    function Export() {
+        var table = document.getElementById("dataTable");
+        var rows = table.getElementsByTagName("tr");
+        var csvData = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll("td, th");
+            for (var j = 0; j < cols.length; j++) {
+                row.push(cols[j].innerText);
+            }
+            csvData.push(row.join(","));
+        }
+        var csvContent = "data:text/csv;charset=utf-8," + csvData.join("\n");
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "BidAll.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>

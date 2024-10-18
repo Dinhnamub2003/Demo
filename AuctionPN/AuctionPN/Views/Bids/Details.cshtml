@@ -1,0 +1,49 @@
+﻿@model AuctionPN.Models.Bid
+
+@{
+    ViewData["Title"] = "Details";
+}
+@{
+    var bid = ViewBag.Bid as Bid;
+}
+<h1>Details</h1>
+<form asp-controller="Bids" asp-action="Update">
+<div>
+    <h4>Bid</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            BidDataTime
+        </dt>
+        <dd class = "col-sm-10">
+            <input type="text" name="biddatetime" value="@bid.BidDataTime" readonly/>
+        </dd>
+        <dt class = "col-sm-2">
+            BidPrice
+        </dt>
+        <dd class = "col-sm-10">
+            <input type="number" name="bidprice" value="@bid.BidPrice" min="@bid.BidPrice" step="@bid.Item.MinimumBidIncrement" />
+        </dd>
+        <dt class = "col-sm-2">
+            Bidder
+        </dt>
+        <dd class = "col-sm-10">
+            <input type="hidden" name="bidderid" value="@bid.Bidder.MemberId" />
+            <input type="text" value="@bid.Bidder.Name" readonly />
+            
+        </dd>
+        <dt class = "col-sm-2">
+            Item
+        </dt>
+        <dd class = "col-sm-10">
+            <input type="hidden" name="itemid" value="@bid.Item.ItemId" />
+            <input type="text" value="@bid.Item.ItemName" readonly />
+        </dd>
+            <input type="hidden" name="id" value="@bid.BidId" />
+    </dl>
+
+</div>
+<div>
+    <input type="submit" value="Đấu giá" />
+</div>
+</form>

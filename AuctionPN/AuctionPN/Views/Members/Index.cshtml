@@ -1,0 +1,80 @@
+﻿@model IEnumerable<AuctionPN.Models.Member>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    var members = ViewBag.Members as List<Member>;
+}
+<h1>Index</h1>
+    <button onclick="Export()">Export</button>
+
+<table id="dataTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Expirationdate
+            </th>
+            <th>
+                Password
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in members) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Address
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.Expirationdate
+            </td>
+            <td>
+                @item.Password
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    function Export() {
+        var table = document.getElementById("dataTable");
+        var rows = table.getElementsByTagName("tr");
+        var csvData = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll("td, th");
+            for (var j = 0; j < cols.length; j++) {
+                row.push(cols[j].innerText);
+            }
+            csvData.push(row.join(","));
+        }
+        var csvContent = "data:text/csv;charset=utf-8," + csvData.join("\n");
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "members.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>

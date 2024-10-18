@@ -1,0 +1,87 @@
+﻿@model IEnumerable<AuctionPN.Models.Item>
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@{
+    var httpContext = ViewContext.HttpContext;
+    var jsonString = httpContext.Session.GetString("User");
+    JObject user = null;
+    if (!string.IsNullOrEmpty(jsonString))
+    {
+        user = JObject.Parse(jsonString);
+    }
+}
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinimumBidIncrement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDataTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seller)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinimumBidIncrement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDataTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemType.ItemTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seller.MemberId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

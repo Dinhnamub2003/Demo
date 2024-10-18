@@ -1,0 +1,62 @@
+﻿@model AuctionPN.Models.Member
+@{
+    ViewData["Title"] = "Edit";
+}
+@{
+    var user = ViewBag.Member as Member;
+}
+<h1>Edit profile</h1>
+
+<h4>Member</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MemberId" value="@user.MemberId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input type="text" asp-for="Name" class="form-control" value="@user.Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input type="text" asp-for="Address" class="form-control" value="@user.Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input type="text" asp-for="Email" readonly class="form-control" value="@user.Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            @if(user.MemberId == 0){
+                <div class="form-group">
+                    <label asp-for="Expirationdate" class="control-label"></label>
+                    <input type="datetime" asp-for="Expirationdate" class="form-control" />
+                    <span asp-validation-for="Expirationdate" class="text-danger"></span>
+                </div>
+            }
+            @if (user.MemberId != 0){
+                <div class="form-group">
+                    <label asp-for="Expirationdate" class="control-label"></label>
+                    <input asp-for="Expirationdate" value="@user.Expirationdate" class="form-control" readonly />
+                    <span asp-validation-for="Expirationdate" class="text-danger"></span>
+                </div>
+            }
+            
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input type="text" asp-for="Password" class="form-control" value="@user.Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

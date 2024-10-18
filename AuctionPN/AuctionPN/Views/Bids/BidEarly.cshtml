@@ -1,0 +1,67 @@
+﻿@model IEnumerable<AuctionPN.Models.Bid>
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@{
+    var httpContext = ViewContext.HttpContext;
+    var jsonString = httpContext.Session.GetString("User");
+    JObject user = null;
+    if (!string.IsNullOrEmpty(jsonString))
+    {
+        user = JObject.Parse(jsonString);
+    }
+}
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    var listBid = ViewBag.ListBid as List<Bid>;
+}
+
+<h1>Cuộc đấu giá sắp diễn ra</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Item
+            </th>
+            <th>
+                BidDataTime
+            </th>
+            <th>
+                BidPrice
+            </th>
+            <th>
+                Bidder
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bid in listBid)
+        {
+            <tr>
+                <td>
+                    <img style="width: 80px; height: auto" src="/img/@bid.Item.ItemImage"/>
+                </td>
+                <td>
+                    @bid.BidDataTime
+                </td>
+                <td>
+                    @bid.BidPrice
+                </td>
+                <td>
+                    Chưa mở bán
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@bid.BidId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@bid.BidId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@bid.BidId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

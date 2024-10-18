@@ -1,0 +1,79 @@
+﻿@model AuctionPN.Models.Item
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@{
+    var httpContext = ViewContext.HttpContext;
+    var jsonString = httpContext.Session.GetString("User");
+    JObject user = null;
+    if (!string.IsNullOrEmpty(jsonString))
+    {
+        user = JObject.Parse(jsonString);
+    }
+}
+@{
+    ViewData["Title"] = "Create";
+}
+@{
+    var listItemType = ViewBag.ListItemType as List<ItemType>;
+}
+
+<h1>Create</h1>
+
+<h4>Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ItemName" class="control-label"></label>
+                <input asp-for="ItemName" class="form-control" />
+                <span asp-validation-for="ItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemDescription" class="control-label"></label>
+                <input asp-for="ItemDescription" class="form-control" />
+                <span asp-validation-for="ItemDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimumBidIncrement" class="control-label"></label>
+                <input asp-for="MinimumBidIncrement" class="form-control" />
+                <span asp-validation-for="MinimumBidIncrement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemImage" class="control-label"></label>
+                <input asp-for="ItemImage" class="form-control" />
+                <span asp-validation-for="ItemImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDataTime" class="control-label"></label>
+                <input asp-for="EndDataTime" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+                <span asp-validation-for="EndDataTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentPrice" class="control-label"></label>
+                <input asp-for="CurrentPrice" class="form-control" />
+                <span asp-validation-for="CurrentPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemTypeId" class="control-label"></label>
+                <select asp-for="ItemTypeId" class ="form-control">
+                    @foreach( var itemtype in listItemType)
+                    {
+                        <option value="@itemtype.ItemTypeId">@itemtype.ItemTypeName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="SellerId" class ="form-control" value="@user["MemberId"]"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
